@@ -1,7 +1,7 @@
 # game-prototype
 Simple javascript-based browser game for 2700
 
-    Overview:
+## Overview:
 
 Our game is called Burden. The premise of the game revolves around the idea
 of “the more you have, the harder it gets.” Much like Pac-Man, the player will control
@@ -11,7 +11,7 @@ certain obstacles that can arise of the screen to increase their total score. We
 javascript because of its extremely flexible nature of coding.
 
 
-    Gameplay:
+## Gameplay:
 
 The player will most likely control a pixelated avatar roaming the boundaries of
 the screen using the WASD keys. The players goal is to gather continuously spawning
