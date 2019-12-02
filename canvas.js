@@ -1,32 +1,105 @@
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 var ballRadius = 15;
-var x = canvas.width/2;
-var y = canvas.height-30;
-var dx = 2;
-var dy = -2;
+var ballX = canvas.width/2;
+var ballY = canvas.height-30;
+var ballDX = 2;
+var ballDY = -2;
 
-function drawBall() {
+var playerHeight = 10;
+var playerWidth = 10;
+var playerX = (canvas.width - playerWidth) / 2;
+var playerY = (canvas.width - playerHeight) / 2;
+var rightPressed = false;
+var leftPressed = false;
+var upPressed = false;
+var downPressed = false;
+
+document.addEventListener("keydown", keyDownHandler, false);
+document.addEventListener("keyup", keyUpHandler, false);
+
+function drawPlayer() {
     ctx.beginPath();
-    ctx.arc(x, y, ballRadius, 0, Math.PI*2);
+    ctx.rect(playerX, playerY, playerWidth, playerHeight);
     ctx.fillStyle = "#0095DD";
     ctx.fill();
     ctx.closePath();
 }
 
-function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawBall();
-
-    if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
-        dx = -dx;
+function keyDownHandler(e) {
+    if(e.key == "Right" || e.key == "ArrowRight") {
+        rightPressed = true;
+    } else if(e.key == "Left" || e.key == "ArrowLeft") {
+        leftPressed = true;
+    } else if(e.key == "Up" || e.key == "ArrowUp") {
+        upPressed = true;
+    } else if(e.key == "Down" || e.key == "ArrowDown") {
+        downPressed = true;
     }
-    if(y + dy > canvas.height-ballRadius || y + dy < ballRadius) {
-        dy = -dy;
-    }
-
-    x += dx;
-    y += dy;
 }
 
+function keyUpHandler(e) {
+    if(e.key == "Right" || e.key == "ArrowRight") {
+        rightPressed = false;
+    } else if(e.key == "Left" || e.key == "ArrowLeft") {
+        leftPressed = false;
+    } else if(e.key == "Up" || e.key == "ArrowUp") {
+        upPressed = false;
+    } else if(e.key == "Down" || e.key == "ArrowDown") {
+        downPressed = false;
+    }
+}
+
+//draws a bouncing ball
+function drawBall() {
+    ctx.beginPath();
+    //draws a circle
+    ctx.arc(ballX, ballY, ballRadius, 0, Math.PI*2);
+    ctx.fillStyle = "#ff0000";
+    //fills the circle
+    ctx.fill();
+    ctx.closePath();
+}
+
+function draw() {
+    //clears the canvas so we can draw a new frame
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawBall();
+    drawPlayer();
+
+    if(ballX + ballDX > canvas.width-ballRadius || ballX + ballDX < ballRadius) {
+        ballDX = -ballDX;
+    }
+    if(ballY + ballDY > canvas.height-ballRadius || ballY + ballDY < ballRadius) {
+        ballDY = -ballDY;
+    }
+
+    if(rightPressed) {
+        playerX += 7;
+        if (playerX + playerWidth > canvas.width){
+            playerX = canvas.width - playerWidth;
+        }
+    }
+    if(leftPressed) {
+        playerX -= 7;
+        if (playerX < 0){
+            playerX = 0;
+        }
+    }
+    if(upPressed) {
+        playerY -= 7;
+        if (playerY < 0) {
+            playerY = 0;
+        }
+    }
+    if(downPressed) {
+        playerY += 7;
+        if (playerY + playerHeight > canvas.height){
+            playerY = canvas.height - playerHeight;
+        }
+    }
+
+    ballX += ballDX;
+    ballY += ballDY;
+}
 setInterval(draw, 10);
