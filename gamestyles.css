@@ -1,8 +1,12 @@
 body {
-    background-color: black;
-
+    background-image: url("burdenbackground.JPG");
+    filter: saturate(200%) brightness(60%);
 }
 
 canvas {
     display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px;
+    background-color: black;
 }
