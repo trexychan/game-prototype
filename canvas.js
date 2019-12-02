@@ -25,6 +25,7 @@ var pickupY = canvas.width / 2;
 const radDX = 0.1;
 var direction = true;
 var pickupRadius = 15;
+var pickupColor = "#FFFF00";
 
 
 document.addEventListener("keydown", keyDownHandler, false);
@@ -79,7 +80,7 @@ function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBall();
     drawPlayer();
-    drawPickup();
+    drawPickup(pickupColor);
 
     if(ballX + ballDX > canvas.width-ballRadius || ballX + ballDX < ballRadius) {
         ballDX = -ballDX;
@@ -90,6 +91,9 @@ function draw() {
         alert("GAME OVER");
         document.location.reload();
         clearInterval(interval); // Needed for Chrome to end game
+    } else if(pickupX + pickupRadius > playerX && pickupX - pickupRadius < (playerX + playerWidth) && pickupY + pickupRadius > playerY && pickupY - pickupRadius < (playerY + playerHeight)) {
+        pickup();
+
     }
 
 
@@ -122,10 +126,10 @@ function draw() {
     ballY += ballDY;
 }
 
-function drawPickup() {
+function drawPickup(color) {
     ctx.beginPath();
     ctx.arc(pickupX, pickupY, calculateRadius(), 0, Math.PI*2);
-    ctx.fillStyle = "#FFFF00";
+    ctx.fillStyle = color;
     ctx.fill();
     ctx.closePath();
 }
@@ -145,6 +149,22 @@ function calculateRadius() {
         pickupRadius -= radDX;
     }
     return pickupRadius;
+}
+
+function pickup() {
+    burdenLevel += 1;
+    pickupY = canvas.height * Math.random();
+    pickupX = canvas.width * Math.random();
+    if(burdenLevel === 9) {
+        pickupColor = "#FFFFFF";
+    } else {
+        pickupColor = "#FFFF00";
+    }
+
+    if(burdenLevel === 10) {
+        //spawn enemy
+        burdenLevel = 0;
+    }
 }
 
 var interval = setInterval(draw, 10);
