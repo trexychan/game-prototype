@@ -26,6 +26,9 @@ const radDX = 0.1;
 var direction = true;
 var pickupRadius = 15;
 var pickupColor = "#FFFF00";
+var ballCount = 1;
+
+var balls = [];
 
 
 document.addEventListener("keydown", keyDownHandler, false);
@@ -63,67 +66,86 @@ function keyUpHandler(e) {
     }
 }
 
-//draws a bouncing ball
-function drawBall() {
-    ctx.beginPath();
-    //draws a circle
-    ctx.arc(ballX, ballY, ballRadius, 0, Math.PI*2);
-    ctx.fillStyle = "#ff0000";
-    //fills the circle
-    ctx.fill();
-    ctx.closePath();
+function addNewBalls() {
+    if (balls.length == 0) {
+        balls.push({x: Math.floor((Math.random() * canvas.width) + 1), y: Math.floor((Math.random() * canvas.height) + 1), ballDX: 2, ballDY: 2});
+    } else {
+        ballCount++;
+        for(var c = balls.length; c < ballCount; c++) {
+            balls.push({x: Math.floor((Math.random() * canvas.width) + 1), y: Math.floor((Math.random() * canvas.height) + 1), ballDX: 2, ballDY: 2});
+        }
+    }
+
 }
+//draws a bouncing ball
+function drawBalls() {
+    for(var i = 0; i < balls.length; i++) {
+        ctx.beginPath();
+        //draws a circle
+        ctx.arc(balls[i].x, balls[i].y, ballRadius, 0, Math.PI*2);
+        ctx.fillStyle = "#ff0000";
+        //fills the circle
+        ctx.fill();
+        ctx.closePath();
+    }
+}
+
 
 function draw() {
     //clears the canvas so we can draw a new frame
     frameNumber++;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawBall();
+    drawBalls();
     drawPlayer();
     drawPickup(pickupColor);
 
-    if(ballX + ballDX > canvas.width-ballRadius || ballX + ballDX < ballRadius) {
-        ballDX = -ballDX;
-    }
-    if(ballY + ballDY > canvas.height - ballRadius || ballY + ballDY < ballRadius) {
-        ballDY = -ballDY;
-    } else if(ballX > playerX && ballX < playerX + playerWidth && ballY > playerY && ballY < playerY + playerHeight) {
-        alert("GAME OVER");
-        document.location.reload();
-        clearInterval(interval); // Needed for Chrome to end game
-    } else if(pickupX + pickupRadius > playerX && pickupX - pickupRadius < (playerX + playerWidth) && pickupY + pickupRadius > playerY && pickupY - pickupRadius < (playerY + playerHeight)) {
+    if(pickupX + pickupRadius > playerX && pickupX - pickupRadius < (playerX + playerWidth) && pickupY + pickupRadius > playerY && pickupY - pickupRadius < (playerY + playerHeight)) {
         pickup();
-
     }
-
+    for(var c = 0; c < balls.length; c++) {
+        if(balls[c].x + balls[c].ballDX > canvas.width - ballRadius || balls[c].x + balls[c].ballDX < ballRadius) {
+            balls[c].ballDX = -balls[c].ballDX;
+        }
+        if(balls[c].y + balls[c].ballDY > canvas.height - ballRadius || balls[c].y + balls[c].ballDY < ballRadius) {
+            balls[c].ballDY = -balls[c].ballDY;
+        } else if(balls[c].x + ballRadius > playerX && balls[c].x - ballRadius < playerX + playerWidth && balls[c].y +ballRadius > playerY && balls[c].y - ballRadius < playerY + playerHeight) {
+            alert("GAME OVER");
+            document.location.reload();
+            clearInterval(interval); // Needed for Chrome to end game
+        }
+    }
 
     if(rightPressed) {
-        playerX += (playerSpeed - (0.5 * burdenLevel));
+        playerX += (playerSpeed - (burdenLevel));
         if (playerX + playerWidth > canvas.width){
             playerX = canvas.width - playerWidth;
         }
     }
     if(leftPressed) {
-        playerX -= (playerSpeed - (0.5 * burdenLevel));
+        playerX -= (playerSpeed - (burdenLevel));
         if (playerX < 0){
             playerX = 0;
         }
     }
     if(upPressed) {
-        playerY -= (playerSpeed - (0.5 * burdenLevel));
+        playerY -= (playerSpeed - (burdenLevel));
         if (playerY < 0) {
             playerY = 0;
         }
     }
     if(downPressed) {
-        playerY += (playerSpeed - (0.5 * burdenLevel));
+        playerY += (playerSpeed - (burdenLevel));
         if (playerY + playerHeight > canvas.height){
             playerY = canvas.height - playerHeight;
         }
     }
 
-    ballX += ballDX;
-    ballY += ballDY;
+    for(var i = 0; i < balls.length; i++) {
+        balls[i].x += balls[i].ballDX;
+        balls[i].y += balls[i].ballDY;
+    }
+    //ballX += ballDX;
+    //ballY += ballDY;
 }
 
 function drawPickup(color) {
@@ -155,14 +177,14 @@ function pickup() {
     burdenLevel += 1;
     pickupY = Math.min(Math.max(canvas.height * Math.random(), pickupRadius), canvas.height - pickupRadius);
     pickupX = Math.min(Math.max(canvas.width * Math.random(), pickupRadius), canvas.width - pickupRadius);
-    if(burdenLevel === 9) {
+    if(burdenLevel === 4) {
         pickupColor = "#FFFFFF";
     } else {
         pickupColor = "#FFFF00";
     }
 
-    if(burdenLevel === 10) {
-        //spawn enemy
+    if(burdenLevel === 5) {
+        addNewBalls();
         burdenLevel = 0;
     }
 }
