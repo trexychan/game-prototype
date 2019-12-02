@@ -6,8 +6,8 @@ var frameNumber = 0;
 const ballRadius = 15;
 var ballX = canvas.width/2;
 var ballY = canvas.height-30;
-var ballDX = 2;
-var ballDY = -2;
+var ballDX = 3.5;
+var ballDY = -3.5;
 
 var playerHeight = 20;
 var playerWidth = 20;
@@ -153,8 +153,8 @@ function calculateRadius() {
 
 function pickup() {
     burdenLevel += 1;
-    pickupY = canvas.height * Math.random();
-    pickupX = canvas.width * Math.random();
+    pickupY = Math.min(Math.max(canvas.height * Math.random(), pickupRadius), canvas.height - pickupRadius);
+    pickupX = Math.min(Math.max(canvas.width * Math.random(), pickupRadius), canvas.width - pickupRadius);
     if(burdenLevel === 9) {
         pickupColor = "#FFFFFF";
     } else {
