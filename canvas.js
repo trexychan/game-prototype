@@ -1,6 +1,9 @@
-var canvas = document.getElementById("myCanvas");
-var ctx = canvas.getContext("2d");
-var ballRadius = 15;
+const canvas = document.getElementById("myCanvas");
+const ctx = canvas.getContext("2d");
+
+var frameNumber = 0;
+
+const ballRadius = 15;
 var ballX = canvas.width/2;
 var ballY = canvas.height-30;
 var ballDX = 2;
@@ -14,9 +17,14 @@ var rightPressed = false;
 var leftPressed = false;
 var upPressed = false;
 var downPressed = false;
-
 const playerSpeed = 7;
 var burdenLevel = 0;
+
+var pickupX = canvas.width / 2;
+var pickupY = canvas.width / 2;
+const radDX = 0.1;
+var direction = true;
+var pickupRadius = 15;
 
 
 document.addEventListener("keydown", keyDownHandler, false);
@@ -67,9 +75,11 @@ function drawBall() {
 
 function draw() {
     //clears the canvas so we can draw a new frame
+    frameNumber++;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBall();
     drawPlayer();
+    drawPickup();
 
     if(ballX + ballDX > canvas.width-ballRadius || ballX + ballDX < ballRadius) {
         ballDX = -ballDX;
@@ -111,4 +121,30 @@ function draw() {
     ballX += ballDX;
     ballY += ballDY;
 }
+
+function drawPickup() {
+    ctx.beginPath();
+    ctx.arc(pickupX, pickupY, calculateRadius(), 0, Math.PI*2);
+    ctx.fillStyle = "#FFFF00";
+    ctx.fill();
+    ctx.closePath();
+}
+
+function calculateRadius() {
+    if (frameNumber % 50 === 0) {
+        if (direction) {
+            direction = false;
+        } else {
+            direction = true;
+        }
+    }
+
+    if(direction) {
+        pickupRadius += radDX;
+    } else {
+        pickupRadius -= radDX;
+    }
+    return pickupRadius;
+}
+
 var interval = setInterval(draw, 10);
