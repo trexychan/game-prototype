@@ -3,8 +3,8 @@ var ctx = canvas.getContext("2d");
 var ballRadius = 15;
 var ballX = canvas.width/2;
 var ballY = canvas.height-30;
-var ballDX = 2;
-var ballDY = -2;
+//var ballDX = 2;
+//var ballDY = -2;
 
 var playerHeight = 20;
 var playerWidth = 20;
@@ -17,6 +17,10 @@ var downPressed = false;
 
 const playerSpeed = 7;
 var burdenLevel = 0;
+
+var ballCount = 1;
+
+var balls = [];
 
 
 document.addEventListener("keydown", keyDownHandler, false);
@@ -54,34 +58,50 @@ function keyUpHandler(e) {
     }
 }
 
-//draws a bouncing ball
-function drawBall() {
-    ctx.beginPath();
-    //draws a circle
-    ctx.arc(ballX, ballY, ballRadius, 0, Math.PI*2);
-    ctx.fillStyle = "#ff0000";
-    //fills the circle
-    ctx.fill();
-    ctx.closePath();
+function addNewBalls() {
+    if (balls.length == 0) {
+        balls.push({x: Math.floor((Math.random() * canvas.width) + 1), y: Math.floor((Math.random() * canvas.height) + 1), ballDX: 2, ballDY: 2});
+    } else {
+        ballCount++;
+        for(var c = balls.length; c < ballCount; c++) {
+            balls.push({x: Math.floor((Math.random() * canvas.width) + 1), y: Math.floor((Math.random() * canvas.height) + 1), ballDX: 2, ballDY: 2});
+        }
+    }
+
 }
+//draws a bouncing ball
+function drawBalls() {
+    for(var i = 0; i < balls.length; i++) {
+        ctx.beginPath();
+        //draws a circle
+        ctx.arc(balls[i].x, balls[i].y, ballRadius, 0, Math.PI*2);
+        ctx.fillStyle = "#ff0000";
+        //fills the circle
+        ctx.fill();
+        ctx.closePath();
+    }
+}
+
 
 function draw() {
     //clears the canvas so we can draw a new frame
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawBall();
+    addNewBalls();
+    drawBalls();
     drawPlayer();
 
-    if(ballX + ballDX > canvas.width-ballRadius || ballX + ballDX < ballRadius) {
-        ballDX = -ballDX;
+    for(var c = 0; c < balls.length; c++) {
+        if(balls[c].x + balls[c].ballDX > canvas.width - ballRadius || balls[c].x + balls[c].ballDX < ballRadius) {
+            balls[c].ballDX = -balls[c].ballDX;
+        }
+        if(balls[c].y + balls[c].ballDY > canvas.height - ballRadius || balls[c].y + balls[c].ballDY < ballRadius) {
+            balls[c].ballDY = -balls[c].ballDY;
+        } else if(balls[c].x > playerX && balls[c].x < playerX + playerWidth && balls[c].y > playerY && balls[c].y < playerY + playerHeight) {
+            alert("GAME OVER");
+            document.location.reload();
+            clearInterval(interval); // Needed for Chrome to end game
+        }
     }
-    if(ballY + ballDY > canvas.height - ballRadius || ballY + ballDY < ballRadius) {
-        ballDY = -ballDY;
-    } else if(ballX > playerX && ballX < playerX + playerWidth && ballY > playerY && ballY < playerY + playerHeight) {
-        alert("GAME OVER");
-        document.location.reload();
-        clearInterval(interval); // Needed for Chrome to end game
-    }
-
 
     if(rightPressed) {
         playerX += (playerSpeed - (0.5 * burdenLevel));
@@ -108,7 +128,11 @@ function draw() {
         }
     }
 
-    ballX += ballDX;
-    ballY += ballDY;
+    for(var i = 0; i < balls.length; i++) {
+        balls[i].x += balls[i].ballDX;
+        balls[i].y += balls[i].ballDY;
+    }
+    //ballX += ballDX;
+    //ballY += ballDY;
 }
 var interval = setInterval(draw, 10);
