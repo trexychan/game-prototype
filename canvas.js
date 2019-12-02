@@ -34,7 +34,7 @@ document.addEventListener("keyup", keyUpHandler, false);
 function drawPlayer() {
     ctx.beginPath();
     ctx.rect(playerX, playerY, playerWidth, playerHeight);
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = "#ffa665";
     ctx.fill();
     ctx.closePath();
 }
@@ -68,7 +68,7 @@ function drawBall() {
     ctx.beginPath();
     //draws a circle
     ctx.arc(ballX, ballY, ballRadius, 0, Math.PI*2);
-    ctx.fillStyle = "#ff0000";
+    ctx.fillStyle = "#ff0b9f";
     //fills the circle
     ctx.fill();
     ctx.closePath();
