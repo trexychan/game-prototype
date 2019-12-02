@@ -6,10 +6,10 @@ var ballY = canvas.height-30;
 var ballDX = 2;
 var ballDY = -2;
 
-var playerHeight = 10;
-var playerWidth = 10;
+var playerHeight = 20;
+var playerWidth = 20;
 var playerX = (canvas.width - playerWidth) / 2;
-var playerY = (canvas.width - playerHeight) / 2;
+var playerY = (canvas.height - playerHeight) / 2;
 var rightPressed = false;
 var leftPressed = false;
 var upPressed = false;
@@ -70,9 +70,14 @@ function draw() {
     if(ballX + ballDX > canvas.width-ballRadius || ballX + ballDX < ballRadius) {
         ballDX = -ballDX;
     }
-    if(ballY + ballDY > canvas.height-ballRadius || ballY + ballDY < ballRadius) {
+    if(ballY + ballDY > canvas.height - ballRadius || ballY + ballDY < ballRadius) {
         ballDY = -ballDY;
-    }
+    } else if(ballX > playerX && ballX < playerX + playerWidth && ballY > playerY && ballY < playerY + playerHeight) {
+        alert("GAME OVER");
+        document.location.reload();
+        clearInterval(interval); // Needed for Chrome to end game
+        }
+
 
     if(rightPressed) {
         playerX += 7;
@@ -102,4 +107,4 @@ function draw() {
     ballX += ballDX;
     ballY += ballDY;
 }
-setInterval(draw, 10);
+var interval = setInterval(draw, 10);
