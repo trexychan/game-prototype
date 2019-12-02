@@ -15,6 +15,10 @@ var leftPressed = false;
 var upPressed = false;
 var downPressed = false;
 
+const playerSpeed = 7;
+var burdenLevel = 0;
+
+
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
@@ -76,29 +80,29 @@ function draw() {
         alert("GAME OVER");
         document.location.reload();
         clearInterval(interval); // Needed for Chrome to end game
-        }
+    }
 
 
     if(rightPressed) {
-        playerX += 7;
+        playerX += (playerSpeed - (0.5 * burdenLevel));
         if (playerX + playerWidth > canvas.width){
             playerX = canvas.width - playerWidth;
         }
     }
     if(leftPressed) {
-        playerX -= 7;
+        playerX -= (playerSpeed - (0.5 * burdenLevel));
         if (playerX < 0){
             playerX = 0;
         }
     }
     if(upPressed) {
-        playerY -= 7;
+        playerY -= (playerSpeed - (0.5 * burdenLevel));
         if (playerY < 0) {
             playerY = 0;
         }
     }
     if(downPressed) {
-        playerY += 7;
+        playerY += (playerSpeed - (0.5 * burdenLevel));
         if (playerY + playerHeight > canvas.height){
             playerY = canvas.height - playerHeight;
         }
