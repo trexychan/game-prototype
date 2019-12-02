@@ -72,6 +72,12 @@ function addNewBalls() {
     } else {
         ballCount++;
         for(var c = balls.length; c < ballCount; c++) {
+            var x = Math.floor((Math.random() * canvas.width) + 1);
+            var y = Math.floor((Math.random() * canvas.height) + 1);
+            while(x + ballRadius > playerX && x - ballRadius < playerX + playerWidth && y + ballRadius > playerY && y - ballRadius < playerY + playerHeight) {
+                x = Math.floor((Math.random() * canvas.width) + 1);
+                y = Math.floor((Math.random() * canvas.height) + 1);
+            }
             balls.push({x: Math.floor((Math.random() * canvas.width) + 1), y: Math.floor((Math.random() * canvas.height) + 1), ballDX: 2, ballDY: 2});
         }
     }
