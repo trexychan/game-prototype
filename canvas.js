@@ -25,7 +25,7 @@ var pickupY = canvas.width / 2;
 const radDX = 0.1;
 var direction = true;
 var pickupRadius = 15;
-var pickupColor = "#FFFF00";
+var pickupColor = "#efab19";
 var ballCount = 1;
 
 var balls = [];
@@ -37,7 +37,7 @@ document.addEventListener("keyup", keyUpHandler, false);
 function drawPlayer() {
     ctx.beginPath();
     ctx.rect(playerX, playerY, playerWidth, playerHeight);
-    ctx.fillStyle = "#ffa665";
+    ctx.fillStyle = "#f28282";
     ctx.fill();
     ctx.closePath();
 }
@@ -186,7 +186,7 @@ function pickup() {
     if(burdenLevel === 4) {
         pickupColor = "#FFFFFF";
     } else {
-        pickupColor = "#FFFF00";
+        pickupColor = "#efab19";
     }
 
     if(burdenLevel === 5) {
