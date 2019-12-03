@@ -36,6 +36,7 @@ var ballCount = 1;
 var balls = [];
 
 var score = 0;
+var dframe = 0;
 
 
 document.addEventListener("keydown", keyDownHandler, false);
@@ -123,9 +124,7 @@ function draw() {
         if(balls[c].y + balls[c].ballDY > canvas.height - ballRadius || balls[c].y + balls[c].ballDY < ballRadius) {
             balls[c].ballDY = -balls[c].ballDY;
         } else if(balls[c].x + ballRadius > playerX && balls[c].x - ballRadius < playerX + playerWidth && balls[c].y +ballRadius > playerY && balls[c].y - ballRadius < playerY + playerHeight) {
-            alert("GAME OVER");
-            document.location.reload();
-            clearInterval(interval); // Needed for Chrome to end game
+            gameOver();
         }
     }
 
@@ -162,6 +161,16 @@ function draw() {
     //ballY += ballDY;
 }
 
+function gameOver() {
+    let audio = new Audio('assets/death.mp3');
+    audio.play().then(r => {
+        alert("GAME OVER");
+        document.location.reload();
+        clearInterval(interval); // Needed for Chrome to end game
+    });
+
+}
+
 function drawPickup(color) {
     ctx.beginPath();
     ctx.arc(pickupX, pickupY, calculateRadius(), 0, Math.PI*2);
@@ -188,9 +197,9 @@ function calculateRadius() {
 }
 
 function drawScore() {
-    ctx.font = "20px Arial";
-    ctx.fillStyle = "#0095DD";
-    ctx.fillText("Score: " + score, 8, 20);
+    ctx.font = "1em consolas";
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fillText("Score: " + score, 16, 32);
 }
 
 function pickup() {
@@ -204,9 +213,14 @@ function pickup() {
     }
 
     if(burdenLevel === 5) {
+        let audio = new Audio('assets/blop.mp3');
+        audio.play();
         addNewBalls();
         score += burdenLevel;
         burdenLevel = 0;
+    } else {
+        let audio = new Audio('assets/blip.mp3');
+        audio.play();
     }
 }
 
