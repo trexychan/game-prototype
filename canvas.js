@@ -109,6 +109,8 @@ function draw() {
         if(balls[c].y + balls[c].ballDY > canvas.height - ballRadius || balls[c].y + balls[c].ballDY < ballRadius) {
             balls[c].ballDY = -balls[c].ballDY;
         } else if(balls[c].x + ballRadius > playerX && balls[c].x - ballRadius < playerX + playerWidth && balls[c].y +ballRadius > playerY && balls[c].y - ballRadius < playerY + playerHeight) {
+            var canva = document.querySelector("#myCanvas");
+            canva.style.backgroundImage = "url('burdengameoverscreen.jpg')";
             alert("GAME OVER");
             document.location.reload();
             clearInterval(interval); // Needed for Chrome to end game
