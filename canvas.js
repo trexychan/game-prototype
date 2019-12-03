@@ -68,17 +68,17 @@ function keyUpHandler(e) {
 
 function addNewBalls() {
     if (balls.length == 0) {
-        balls.push({x: Math.floor((Math.random() * canvas.width) + 1), y: Math.floor((Math.random() * canvas.height) + 1), ballDX: 2, ballDY: 2});
+        balls.push({x: Math.floor((Math.random() * canvas.width) + 1), y: Math.floor((Math.random() * canvas.height) + 1), ballDX: Math.random() > 0.5 ? 2 : -2, ballDY: Math.random() > 0.5 ? 2 : -2});
     } else {
         ballCount++;
         for(var c = balls.length; c < ballCount; c++) {
-            var x = Math.floor((Math.random() * canvas.width) + 1);
-            var y = Math.floor((Math.random() * canvas.height) + 1);
+            var x = Math.min(Math.max(canvas.width * Math.random(), ballRadius), canvas.width - ballRadius);
+            var y = Math.min(Math.max(canvas.height * Math.random(), ballRadius), canvas.height - ballRadius);
             while(x + ballRadius > playerX && x - ballRadius < playerX + playerWidth && y + ballRadius > playerY && y - ballRadius < playerY + playerHeight) {
-                x = Math.floor((Math.random() * canvas.width) + 1);
-                y = Math.floor((Math.random() * canvas.height) + 1);
+                x = Math.min(Math.max(canvas.width * Math.random(), ballRadius), canvas.width - ballRadius);
+                y = Math.min(Math.max(canvas.height * Math.random(), ballRadius), canvas.height - ballRadius);
             }
-            balls.push({x: Math.floor((Math.random() * canvas.width) + 1), y: Math.floor((Math.random() * canvas.height) + 1), ballDX: 2, ballDY: 2});
+            balls.push({x: Math.floor((Math.random() * canvas.width) + 1), y: Math.floor((Math.random() * canvas.height) + 1), ballDX: Math.random() > 0.5 ? 2 : -2, ballDY: Math.random() > 0.5 ? 2 : -2});
         }
     }
 
