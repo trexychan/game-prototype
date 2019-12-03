@@ -1,18 +1,9 @@
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
-var backgroundMusic = new Audio("/assets/GameOver.mp3");
-backgroundMusic.autoplay = true;
-backgroundMusic.loop = true;
-backgroundMusic.load();
-backgroundMusic.play();
 
 var frameNumber = 0;
 
 const ballRadius = 15;
-var ballX = canvas.width/2;
-var ballY = canvas.height-30;
-var ballDX = 3.5;
-var ballDY = -3.5;
 
 var playerHeight = 20;
 var playerWidth = 20;
