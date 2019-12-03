@@ -1,5 +1,10 @@
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
+var backgroundMusic = new Audio("/assets/GameOver.mp3");
+backgroundMusic.autoplay = true;
+backgroundMusic.loop = true;
+backgroundMusic.load();
+backgroundMusic.play();
 
 var frameNumber = 0;
 
