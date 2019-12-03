@@ -161,6 +161,8 @@ function draw() {
 function gameOver() {
     let audio = new Audio('assets/death.mp3');
     audio.play().then(r => {
+        var canva = document.querySelector("#myCanvas");
+        canva.style.backgroundImage = "url('burdengameoverscreen.jpg')";
         alert("GAME OVER");
         clearInterval(interval); // Needed for Chrome to end game
         document.location.reload();
