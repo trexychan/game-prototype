@@ -38,6 +38,9 @@ var balls = [];
 var score = 0;
 var dframe = 0;
 
+let music = new Audio('assets/GameOver.mp3');
+music.autoplay = true;
+music.play();
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
@@ -107,6 +110,7 @@ function drawBalls() {
 
 function draw() {
     //clears the canvas so we can draw a new frame
+    dframe++;
     frameNumber++;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBalls();
@@ -165,8 +169,8 @@ function gameOver() {
     let audio = new Audio('assets/death.mp3');
     audio.play().then(r => {
         alert("GAME OVER");
-        document.location.reload();
         clearInterval(interval); // Needed for Chrome to end game
+        document.location.reload();
     });
 
 }
@@ -216,12 +220,14 @@ function pickup() {
         let audio = new Audio('assets/blop.mp3');
         audio.play();
         addNewBalls();
-        score += burdenLevel;
+        score += Math.ceil((20 - dframe/80));
         burdenLevel = 0;
     } else {
+        score += Math.ceil((10 - dframe/80));
         let audio = new Audio('assets/blip.mp3');
         audio.play();
     }
+    dframe = 0;
 }
 
 var interval = setInterval(draw, 10);
