@@ -4,10 +4,6 @@ const ctx = canvas.getContext("2d");
 var frameNumber = 0;
 
 const ballRadius = 15;
-var ballX = canvas.width/2;
-var ballY = canvas.height-30;
-var ballDX = 3.5;
-var ballDY = -3.5;
 
 var playerHeight = 20;
 var playerWidth = 20;
@@ -30,6 +26,14 @@ var ballCount = 1;
 
 var balls = [];
 
+var score = 0;
+var oldScore = 0;
+var dframe = 0;
+var fade = 0;
+
+let music = new Audio('assets/GameOver.mp3');
+music.autoplay = true;
+music.play();
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
@@ -68,11 +72,17 @@ function keyUpHandler(e) {
 
 function addNewBalls() {
     if (balls.length == 0) {
-        balls.push({x: Math.floor((Math.random() * canvas.width) + 1), y: Math.floor((Math.random() * canvas.height) + 1), ballDX: 2, ballDY: 2});
+        balls.push({x: Math.floor((Math.random() * canvas.width) + 1), y: Math.floor((Math.random() * canvas.height) + 1), ballDX: Math.random() > 0.5 ? 2 : -2, ballDY: Math.random() > 0.5 ? 2 : -2});
     } else {
         ballCount++;
         for(var c = balls.length; c < ballCount; c++) {
-            balls.push({x: Math.floor((Math.random() * canvas.width) + 1), y: Math.floor((Math.random() * canvas.height) + 1), ballDX: 2, ballDY: 2});
+            var x = Math.min(Math.max(canvas.width * Math.random(), ballRadius), canvas.width - ballRadius);
+            var y = Math.min(Math.max(canvas.height * Math.random(), ballRadius), canvas.height - ballRadius);
+            while(x + ballRadius > playerX && x - ballRadius < playerX + playerWidth && y + ballRadius > playerY && y - ballRadius < playerY + playerHeight) {
+                x = Math.min(Math.max(canvas.width * Math.random(), ballRadius), canvas.width - ballRadius);
+                y = Math.min(Math.max(canvas.height * Math.random(), ballRadius), canvas.height - ballRadius);
+            }
+            balls.push({x: Math.floor((Math.random() * canvas.width) + 1), y: Math.floor((Math.random() * canvas.height) + 1), ballDX: Math.random() > 0.5 ? 2 : -2, ballDY: Math.random() > 0.5 ? 2 : -2});
         }
     }
 
@@ -93,11 +103,13 @@ function drawBalls() {
 
 function draw() {
     //clears the canvas so we can draw a new frame
+    dframe++;
     frameNumber++;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBalls();
     drawPlayer();
     drawPickup(pickupColor);
+    drawScore();
 
     if(pickupX + pickupRadius > playerX && pickupX - pickupRadius < (playerX + playerWidth) && pickupY + pickupRadius > playerY && pickupY - pickupRadius < (playerY + playerHeight)) {
         pickup();
@@ -109,11 +121,7 @@ function draw() {
         if(balls[c].y + balls[c].ballDY > canvas.height - ballRadius || balls[c].y + balls[c].ballDY < ballRadius) {
             balls[c].ballDY = -balls[c].ballDY;
         } else if(balls[c].x + ballRadius > playerX && balls[c].x - ballRadius < playerX + playerWidth && balls[c].y +ballRadius > playerY && balls[c].y - ballRadius < playerY + playerHeight) {
-            var canva = document.querySelector("#myCanvas");
-            canva.style.backgroundImage = "url('burdengameoverscreen.jpg')";
-            alert("GAME OVER");
-            document.location.reload();
-            clearInterval(interval); // Needed for Chrome to end game
+            gameOver();
         }
     }
 
@@ -150,12 +158,29 @@ function draw() {
     //ballY += ballDY;
 }
 
+function gameOver() {
+    let audio = new Audio('assets/death.mp3');
+    audio.play().then(r => {
+        alert("GAME OVER");
+        clearInterval(interval); // Needed for Chrome to end game
+        document.location.reload();
+    });
+
+}
+
 function drawPickup(color) {
     ctx.beginPath();
     ctx.arc(pickupX, pickupY, calculateRadius(), 0, Math.PI*2);
     ctx.fillStyle = color;
     ctx.fill();
     ctx.closePath();
+
+    if(fade > 0) {
+        ctx.fillStyle="#FFFFFF";
+        ctx.textAlign = "center";
+        ctx.fillText("+" + (score-oldScore), playerX + (playerWidth/2), playerY - 16);
+        fade--;
+    }
 }
 
 function calculateRadius() {
@@ -175,7 +200,18 @@ function calculateRadius() {
     return pickupRadius;
 }
 
+function drawScore() {
+    ctx.font = "1em consolas";
+    ctx.fillStyle = "#FFFFFF";
+    ctx.textAlign = "left";
+    ctx.fillText("Score: " + score, 16, 32);
+    ctx.textAlign = "right";
+    ctx.fillText("Burden: " + burdenLevel, canvas.width - 16, 32);
+}
+
 function pickup() {
+    oldScore = score;
+
     burdenLevel += 1;
     pickupY = Math.min(Math.max(canvas.height * Math.random(), pickupRadius), canvas.height - pickupRadius);
     pickupX = Math.min(Math.max(canvas.width * Math.random(), pickupRadius), canvas.width - pickupRadius);
@@ -186,8 +222,16 @@ function pickup() {
     }
 
     if(burdenLevel === 5) {
+        fade = 45;
+        let audio = new Audio('assets/blop.mp3');
+        audio.play();
         addNewBalls();
+        score += Math.ceil((10 * burdenLevel) - dframe/60);
+        dframe = 0;
         burdenLevel = 0;
+    } else {
+        let audio = new Audio('assets/blip.mp3');
+        audio.play();
     }
 }
 

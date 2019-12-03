@@ -1,5 +1,5 @@
 #background {
-    background-image: url("burdenbackground.JPG");
+    background-image: url("assets/burdenbackground.JPG");
     padding: 0;
     margin: 0;
     position: fixed;
@@ -13,6 +13,6 @@ canvas {
     display: block;
     margin-left: auto;
     margin-right: auto;
-    background-image: url("burdenbackground.JPG");
+    background-image: url("assets/burdenbackground.JPG");
     filter: saturate(150%) brightness(80%);
 }
