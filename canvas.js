@@ -30,6 +30,8 @@ var ballCount = 1;
 
 var balls = [];
 
+var score = 0;
+
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
@@ -104,6 +106,7 @@ function draw() {
     drawBalls();
     drawPlayer();
     drawPickup(pickupColor);
+    drawScore();
 
     if(pickupX + pickupRadius > playerX && pickupX - pickupRadius < (playerX + playerWidth) && pickupY + pickupRadius > playerY && pickupY - pickupRadius < (playerY + playerHeight)) {
         pickup();
@@ -179,6 +182,12 @@ function calculateRadius() {
     return pickupRadius;
 }
 
+function drawScore() {
+    ctx.font = "20px Arial";
+    ctx.fillStyle = "#0095DD";
+    ctx.fillText("Score: " + score, 8, 20);
+}
+
 function pickup() {
     burdenLevel += 1;
     pickupY = Math.min(Math.max(canvas.height * Math.random(), pickupRadius), canvas.height - pickupRadius);
@@ -191,6 +200,7 @@ function pickup() {
 
     if(burdenLevel === 5) {
         addNewBalls();
+        score += burdenLevel;
         burdenLevel = 0;
     }
 }
