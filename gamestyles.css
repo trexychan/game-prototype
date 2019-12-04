@@ -9,8 +9,8 @@
     width: 100%;
 }
 
-#gameoverBG {
-    background-image: url("assets/burdenbackground.JPG");
+.endgame {
+    background-image: url("burdenGO.JPG");
     padding: 0;
     margin: 0;
     position: fixed;
