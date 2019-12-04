@@ -161,8 +161,8 @@ function draw() {
 function gameOver() {
     let audio = new Audio('assets/death.mp3');
     audio.play().then(r => {
-        clearInterval(interval); // Needed for Chrome to end game
         alert("GAME OVER \n Your final score is: " + score);
+        clearInterval(interval); // Needed for Chrome to end game
         window.location.href = "GameOver.html";
         //document.location.reload();
     });
