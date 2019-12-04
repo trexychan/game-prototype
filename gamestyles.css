@@ -9,17 +9,6 @@
     width: 100%;
 }
 
-.endgame {
-    background-image: url("burdenGO.JPG");
-    padding: 0;
-    margin: 0;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-}
-
 .instructions {
     text-align: center;
     font-size: 24px;
@@ -72,9 +61,4 @@ h1 {
     font-family: 'GFS Didot', serif;
     text-align: center;
     margin: 20px;
-}
-
-#gameoverBG {
-    background-image: url("burdenGO.JPG");
-    background-size: cover;
 }
